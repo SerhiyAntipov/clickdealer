@@ -37,6 +37,7 @@ li:focus{
 
 .screen-01__ul {
     display: inline-block;
+    max-width: 230px;
 }
 
 .screen-01__ul-list {

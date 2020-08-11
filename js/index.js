@@ -10,6 +10,8 @@ document.querySelector('html').addEventListener("keydown", function (event) {
     let screen02 = document.querySelector('.screen-02');
     let screen01BtnAdd = document.querySelector('.screen-01__btn-add');
     let screen02Input = document.querySelector('.screen-02__input');
+    let screen02BtnAdd = document.querySelector('.screen-02__btn-add');
+    let screen02BtnCancel = document.querySelector('.screen-02__btn-cancel');
 
     downScreen01 = () => {
         console.log('down');
@@ -47,12 +49,28 @@ document.querySelector('html').addEventListener("keydown", function (event) {
     }
 
     enterScreen01 = () => {
-        console.log('enter');
+        console.log('enterScreen01');
         screen01.classList.toggle('hidden');
         screen01.classList.toggle('visible');
         screen02.classList.toggle('hidden');
         screen02.classList.toggle('visible');
         screen02Input.focus();
+    }
+
+    addScreen02 = () => {
+        activeAccounts = true;
+        console.log(dataAccounts);
+        let newAccount = {
+            "title": screen02Input.value,
+            "img": "images/iconfinder_photo_370076.png"
+        }
+        dataAccounts.push(newAccount);
+        screen02Input.value = '';
+    }
+
+    addCancel02 = () =>{
+        screen02Input.value = '';
+        activeAccounts = true;
     }
 
     if (screen01.classList.contains('visible')) {
@@ -78,16 +96,40 @@ document.querySelector('html').addEventListener("keydown", function (event) {
             }
         }
     } else if (screen02.classList.contains('visible')) {
-        if (event.keyCode == 13) {
-            activeAccounts = true;
-            console.log(dataAccounts);
-            
-            let newAccount = {
-                "title": screen02Input.value,
-                "img": "images/iconfinder_photo_370076.png"
+        if (event.keyCode == 40) {
+            if (screen02Active == 'add') {
+                screen02BtnAdd.focus()
+                console.log('down2 add')
+            } else if (screen02Active == 'cancel') {
+                screen02BtnCancel.focus();
+                console.log('down2 cancel')
+            } else if (screen02Active == 'input') {
+                console.log('down2 input');
+                screen02Active = 'add';
+                screen02BtnAdd.focus()
             }
-            dataAccounts.unshift(newAccount);
-            screen02Input.value = '';
+
+        } else if (event.keyCode == 38) {
+            console.log('up02')
+            screen02Input.focus();
+            screen02Active = 'input'
+            console.log(screen02Active)
+
+        } else if (event.keyCode == 39 && screen02Active != 'input') {
+            console.log('right 02')
+            screen02BtnCancel.focus();
+            screen02Active = 'cancel'
+        } else if (event.keyCode == 37 && screen02Active != 'input') {
+            console.log('left 02')
+            screen02BtnAdd.focus();
+            screen02Active = 'add'
+        }
+        if (event.keyCode == 13 && screen02Active == 'add') {
+            addScreen02();
+            renderAccountsList(dataAccounts);
+            enterScreen01()
+        } else if (event.keyCode == 13 && screen02Active == 'cancel') {
+            addCancel02()
             renderAccountsList(dataAccounts);
             enterScreen01()
         }
@@ -111,7 +153,11 @@ let dataAccounts
 let ulListAccounts = document.querySelector(".screen-01__ul");
 let activeAccounts = true;
 let numberActiveAccounts = 0;
-let listAccounts
+let listAccounts;
+let screen02Active = 'input';
+let screen02LastActivity = 'add'
+let inputActive = true;
+
 renderAccountsList = (dataAccounts) => {
 
     ulListAccounts.innerHTML = '';
@@ -134,7 +180,8 @@ renderAccountsList = (dataAccounts) => {
     // select active -------------------
     listAccounts = document.querySelectorAll(".screen-01__ul li");
     if (dataAccounts.length > 0) {
-        console.log(dataAccounts)
+
+        console.log(numberActiveAccounts)
         listAccounts[numberActiveAccounts].classList.add('active');
     }
 }
