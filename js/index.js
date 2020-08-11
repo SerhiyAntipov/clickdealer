@@ -84,7 +84,7 @@ document.querySelector('html').addEventListener("keydown", function (event) {
             
             let newAccount = {
                 "title": screen02Input.value,
-                "img": "/images/iconfinder_photo_370076.png"
+                "img": "images/iconfinder_photo_370076.png"
             }
             dataAccounts.unshift(newAccount);
             screen02Input.value = '';
