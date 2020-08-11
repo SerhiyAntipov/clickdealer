@@ -1,0 +1,16 @@
+{
+    "accounts": [
+        {
+            "title": "first title 01",
+            "img": "/images/iconfinder_photo_370076.png"
+        },
+        {
+            "title": "second title 02",
+            "img": "/images/iconfinder_photo_370076.png"
+        },
+        {
+            "title": "third title 03",
+            "img": "/images/iconfinder_photo_370076.png"
+        }
+    ]
+}

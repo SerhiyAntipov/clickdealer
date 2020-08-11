@@ -1,0 +1,37 @@
+.active {
+    outline   : none;
+    box-shadow: 0px 1px 2px 1px var(--color-black);
+}
+
+.input-white{
+    border: 1px solid var(--color-black);
+    border-radius: 3px;
+}
+
+.input-white:focus{
+    border: 1px solid var(--color-black);
+    outline   : none;
+    box-shadow: 0px 1px 2px 1px var(--color-black);
+}
+
+.btn-middle-white {
+    display         : inline-block;
+    min-width       : 85px;
+    font-size       : 1rem;
+    font-weight     : bold;
+    text-transform  : uppercase;
+    color           : var(--color-black);
+    background-color: var(--color-grey-lite);
+    margin          : 5px 0;
+    padding         : 5px;
+    border-radius   : 3px;
+    border          : 1px solid var(--color-black);
+
+}
+
+.btn-middle-white:focus {
+    color           : var(--color-white);
+    background-color: var(--color-grey);
+    outline         : none;
+    box-shadow      : 0px 1px 2px 1px var(--color-black);
+}
