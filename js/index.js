@@ -1,12 +1,12 @@
 window.onload = function () {
 
-    // global variables-------------------
+    // Global variables-------------------
     let dataAccounts;
     let activeAccounts = true;
     let numberActiveAccount = 0;
     let listAccounts = document.querySelectorAll(".screen-01__ul li");
 
-    // Forbid clicking the mouse ---------
+    // Disable all click events on page ---------
     document.querySelector('body').addEventListener("mousedown", function (event) {
         event.preventDefault();
     });
@@ -23,7 +23,7 @@ window.onload = function () {
             })
     })();
 
-    // Render accounts list ---------------
+    // Render a list of accounts  ---------------
     renderAccountsList = (dataAccounts) => {
         let wrapperListAccounts = document.querySelector(".screen-01__ul");
         wrapperListAccounts.innerHTML = '';
@@ -41,7 +41,7 @@ window.onload = function () {
             wrapperListAccounts.appendChild(accountInfo);
         });
 
-        // select active accounts ----------
+        // Select active accounts ----------
         listAccounts = document.querySelectorAll(".screen-01__ul li");
         if (dataAccounts.length > 0) {
             listAccounts[numberActiveAccount].classList.add('active');
@@ -49,9 +49,9 @@ window.onload = function () {
     }
 
     // Track keystrokes ------------------
-    let screen02Active = 'input';
     let screen02LastActivity = 'add';
     let inputActive = true;
+
     document.querySelector('html').addEventListener("keydown", function (event) {
         let screen01 = document.querySelector('.screen-01');
         let screen01BtnAdd = document.querySelector('.screen-01__btn-add');
@@ -60,35 +60,30 @@ window.onload = function () {
         let screen02BtnAdd = document.querySelector('.screen-02__btn-add');
         let screen02BtnCancel = document.querySelector('.screen-02__btn-cancel');
 
-        // btn function ------------------
+        // Btn function ------------------
         downScreen01 = () => {
-            console.log('down');
             listAccounts[numberActiveAccount].classList.toggle('active');
             numberActiveAccount = numberActiveAccount + 1;
             listAccounts[numberActiveAccount].classList.add('active');
         }
 
         upScreen01 = () => {
-            console.log('up');
             listAccounts[numberActiveAccount].classList.toggle('active');
             numberActiveAccount = numberActiveAccount - 1;
             listAccounts[numberActiveAccount].classList.add('active');
         }
 
         rightScreen01 = () => {
-            console.log('right');
             screen01BtnAdd.focus();
             listAccounts[numberActiveAccount].classList.toggle('active');
             activeAccounts = false;
         }
 
         leftScreen01 = () => {
-            console.log('left');
             dataAccounts.splice(numberActiveAccount, 1);
             if (numberActiveAccount == listAccounts.length - 1) {
                 numberActiveAccount = numberActiveAccount - 1;
                 if (listAccounts.length == 1) {
-                    console.log('last');
                     numberActiveAccount = 0;
                     activeAccounts == false;
                     screen01BtnAdd.focus();
@@ -96,8 +91,13 @@ window.onload = function () {
             }
         }
 
+        leftOfAddBtnScreen01 = () => {
+            screen01BtnAdd.blur();
+            activeAccounts = true;
+            listAccounts[numberActiveAccount].classList.toggle('active');
+        }
+
         enterScreen01 = () => {
-            console.log('enterScreen01');
             screen01.classList.toggle('hidden');
             screen01.classList.toggle('visible');
             screen02.classList.toggle('hidden');
@@ -107,27 +107,53 @@ window.onload = function () {
 
         addScreen02 = () => {
             activeAccounts = true;
-            console.log(dataAccounts);
             let newAccount = {
                 "title": screen02Input.value,
                 "img": "images/iconfinder_photo_370076.png"
             }
             dataAccounts.push(newAccount);
             screen02Input.value = '';
+            inputActive = true;
         }
 
         cancelScreen02 = () => {
             screen02Input.value = '';
             if (dataAccounts.length == 0) {
-                console.log(dataAccounts.length);
                 activeAccounts = false;
                 screen01BtnAdd.focus();
             } else {
                 activeAccounts = true;
             }
+            inputActive = true;
         }
 
-        // conditions for pressing the button --------
+        downScreen02 = () => {
+            if (screen02LastActivity == 'add') {
+                screen02BtnAdd.focus();
+                inputActive = false;
+            } else if (screen02LastActivity == 'cancel') {
+                screen02BtnCancel.focus();
+                inputActive = false;
+            }
+        }
+
+        upScreen02 = () => {
+            screen02Input.focus();
+            inputActive = true;
+        }
+
+        rightScreen02 = () => {
+            screen02BtnCancel.focus();
+            screen02LastActivity = 'cancel';
+        }
+
+        leftScreen02 = () => {
+            screen02BtnAdd.focus();
+            screen02LastActivity = 'add';
+        }
+
+        //Condition on button click--------
+        // Screen 01 
         if (screen01.classList.contains('visible')) {
             if (activeAccounts == true && listAccounts.length > 0) {
                 if (event.keyCode == 40 && numberActiveAccount < listAccounts.length - 1) {
@@ -140,54 +166,34 @@ window.onload = function () {
                     leftScreen01();
                     renderAccountsList(dataAccounts);
                 }
-            } else if (activeAccounts == false || listAccounts.length == 1) {
+            } else if (activeAccounts == false) {
                 if (event.keyCode == 37) {
-                    screen01BtnAdd.blur();
-                    activeAccounts = true;
-                    listAccounts[numberActiveAccount].classList.toggle('active');
-                    console.log('left');
+                    leftOfAddBtnScreen01();
                 } else if (event.keyCode == 13) {
                     enterScreen01();
                 }
             } else if (listAccounts.length == 0 && event.keyCode == 13) {
                 enterScreen01();
             }
+        // Screen 02
         } else if (screen02.classList.contains('visible')) {
-            if (event.keyCode == 40) {
-                if (screen02Active == 'add') {
-                    screen02BtnAdd.focus();
-                    console.log('down2 add');
-                } else if (screen02Active == 'cancel') {
-                    screen02BtnCancel.focus();
-                    console.log('down2 cancel');
-                } else if (screen02Active == 'input') {
-                    console.log('down2 input');
-                    screen02Active = 'add';
-                    screen02BtnAdd.focus()
-                }
-            } else if (event.keyCode == 38) {
-                console.log('up02');
-                screen02Input.focus();
-                screen02Active = 'input';
-                console.log(screen02Active);
-            } else if (event.keyCode == 39 && screen02Active != 'input') {
-                console.log('right 02');
-                screen02BtnCancel.focus();
-                screen02Active = 'cancel';
-            } else if (event.keyCode == 37 && screen02Active != 'input') {
-                console.log('left 02');
-                screen02BtnAdd.focus();
-                screen02Active = 'add';
-            }
-            if (event.keyCode == 13 && screen02Active == 'add') {
+            if (event.keyCode == 40 && inputActive == true) {
+                downScreen02();
+            } else if (event.keyCode == 38 && inputActive == false) {
+                upScreen02();
+            } else if (event.keyCode == 39 && inputActive == false) {
+                rightScreen02()
+            } else if (event.keyCode == 37 && inputActive == false) {
+                leftScreen02()
+            } else if (event.keyCode == 13 && screen02LastActivity == 'add' && inputActive == false) {
                 addScreen02();
                 renderAccountsList(dataAccounts);
                 enterScreen01();
-            } else if (event.keyCode == 13 && screen02Active == 'cancel') {
+            } else if (event.keyCode == 13 && screen02LastActivity == 'cancel') {
+                cancelScreen02();
                 renderAccountsList(dataAccounts);
                 enterScreen01();
-                cancelScreen02();
             }
         }
     });
-}
+};
